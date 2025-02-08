@@ -5,6 +5,6 @@ import androidx.room.*
 @Dao
 interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTransaction(transaction: Transaction)
+    suspend fun insertTransaction(transactionEntity: TransactionEntity)
 
 }

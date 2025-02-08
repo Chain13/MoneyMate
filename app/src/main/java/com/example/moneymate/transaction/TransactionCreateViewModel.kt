@@ -54,7 +54,7 @@ class TransactionCreateViewModel(application: Application) : ViewModel() {
         val amountValue = _amount.value.toDoubleOrNull()
 
         if (type.isNotEmpty() && category.isNotEmpty() && amountValue != null && amountValue > 0) {
-            val transaction = Transaction(
+            val transactionEntity = TransactionEntity(
                 type = type,
                 category = category,
                 amount = amountValue,
@@ -62,7 +62,7 @@ class TransactionCreateViewModel(application: Application) : ViewModel() {
             )
 
             viewModelScope.launch {
-                repository.insert(transaction)
+                repository.insert(transactionEntity)
                 _isTransactionSaved.value = true
             }
         }
