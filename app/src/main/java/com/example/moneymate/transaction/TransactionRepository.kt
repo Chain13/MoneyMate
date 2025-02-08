@@ -1,10 +1,10 @@
 package com.example.moneymate.transaction
 
 
-class TransactionRepository(private val transactionDao: TransactionDao) {
+class TransactionRepository(private val TransactionRepository: TransactionDao) {
 
     suspend fun insert(transactionEntity: TransactionEntity) {
-        transactionDao.insertTransaction(transactionEntity)
+        TransactionRepository.insertTransaction(transactionEntity)
     }
 
 }

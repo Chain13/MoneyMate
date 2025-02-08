@@ -1,13 +1,14 @@
 package com.example.moneymate.transaction
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "transactions")
 data class TransactionEntity(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val type: String,  // "Expense", "Income", "Transfer"
-    val category: String,
-    val amount: Double,
-    val date: Long // Store as timestamp (Epoch time)
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    @ColumnInfo(name = "amount") val amount: Double,
+    @ColumnInfo(name = "category") val category: String,
+    @ColumnInfo(name = "type_id") val typeId: Long?,
+    @ColumnInfo(name = "date") val date: Long
 )

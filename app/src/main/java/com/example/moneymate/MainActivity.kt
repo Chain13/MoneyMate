@@ -16,8 +16,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.moneymate.transaction.TransactionCreateView
-import com.example.moneymate.transaction.TransactionCreateViewModel
-import com.example.moneymate.transaction.TransactionCreateViewModelFactory
+import com.example.moneymate.transaction.TransactionTypeCreateView
+import com.example.moneymate.transaction.TransactionTypeCreateViewFactory
+import com.example.moneymate.transaction.TransactionTypeCreateViewModel
 import com.example.moneymate.ui.theme.MoneyMateTheme
 
 
@@ -31,10 +32,10 @@ class MainActivity : ComponentActivity() {
                     val owner = LocalViewModelStoreOwner.current
 
                     owner?.let {
-                        val viewModel: TransactionCreateViewModel = viewModel(
+                        val viewModel: TransactionTypeCreateViewModel = viewModel(
                             it,
-                            "TransactionCreateViewModelFactory",
-                            TransactionCreateViewModelFactory(
+                            "TransactionTypeCreateViewFactory",
+                            TransactionTypeCreateViewFactory(
                                 LocalContext.current.applicationContext
                                         as Application
                             )
@@ -43,10 +44,10 @@ class MainActivity : ComponentActivity() {
                         val navController = rememberNavController()
                         NavHost(
                             navController = navController,
-                            startDestination = NavRoutes.Home.route
+                            startDestination = NavRoutes.TransactionTypeCreate.route
                         ) {
-                            composable(NavRoutes.Home.route) {
-                                TransactionCreateView(
+                            composable(NavRoutes.TransactionTypeCreate.route) {
+                                TransactionTypeCreateView(
                                     viewModel,
                                     navController,
                                     modifier = Modifier.padding(innerPadding)
