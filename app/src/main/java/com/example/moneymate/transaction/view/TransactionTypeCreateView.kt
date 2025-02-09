@@ -1,6 +1,7 @@
 package com.example.moneymate.transaction.view
 
 import android.app.Application
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +28,7 @@ import com.example.moneymate.transaction.viewModel.TransactionTypeCreateViewMode
 fun TransactionTypeCreateView(viewModel: TransactionTypeCreateViewModel, navController: NavHostController, modifier: Modifier) {
     val transactionType by viewModel.type.collectAsState()
     val isTransactionTypeSaved by viewModel.isTransactionTypeSaved.collectAsState()
-    Column(modifier=modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier=modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(20.dp)) {
         Text("Transaction Type", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier= Modifier.height(20.dp))
         OutlinedTextField(
@@ -37,6 +38,7 @@ fun TransactionTypeCreateView(viewModel: TransactionTypeCreateViewModel, navCont
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("Enter type (Expense, Income, Transfer)") }
         )
+
         Button(
             onClick = {
                 viewModel.saveTransactionType()
@@ -44,6 +46,14 @@ fun TransactionTypeCreateView(viewModel: TransactionTypeCreateViewModel, navCont
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Save Transaction Type")
+        }
+        Button(
+            onClick = {
+                navController.popBackStack()
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Cancel")
         }
         Spacer(modifier = Modifier.height(20.dp))
 

@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.navigation.compose)
     implementation("androidx.room:room-gradle-plugin")
+    implementation("androidx.compose.material3:material3:1.4.0-alpha07")
     annotationProcessor(libs.androidx.room.room.compiler)
     ksp(libs.androidx.room.room.compiler)
     testImplementation(libs.junit)

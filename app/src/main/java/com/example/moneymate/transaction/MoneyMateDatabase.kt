@@ -14,21 +14,26 @@ import com.example.moneymate.transaction.entity.TransactionTypeEntity
 
 @Database(
     entities = [TransactionEntity::class, TransactionTypeEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = true,
     autoMigrations = [
-        AutoMigration (
+        AutoMigration(
             from = 1,
             to = 2,
-            spec = MoneyMateDatabase.MyAutoMigration::class
+            spec = MoneyMateDatabase.Migartion_1_2::class
+        ),
+        AutoMigration(
+            from = 2,
+            to = 3,
         )
     ]
 )
 abstract class MoneyMateDatabase : RoomDatabase() {
     abstract fun transactionDao(): TransactionDao
     abstract fun transactionTypeDao(): TransactionTypeDao
+
     @RenameColumn(tableName = "transactions", fromColumnName = "type", toColumnName = "typeId")
-    class MyAutoMigration: AutoMigrationSpec
+    class Migartion_1_2 : AutoMigrationSpec
     companion object {
         @Volatile
         private var INSTANCE: MoneyMateDatabase? = null

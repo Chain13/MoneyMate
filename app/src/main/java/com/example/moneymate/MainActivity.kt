@@ -15,8 +15,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.moneymate.transaction.view.TransactionCreateView
+import com.example.moneymate.transaction.view.TransactionCreteViewModelFactory
 import com.example.moneymate.transaction.view.TransactionTypeCreateView
 import com.example.moneymate.transaction.view.TransactionTypeCreateViewFactory
+import com.example.moneymate.transaction.viewModel.TransactionCreateViewModel
 import com.example.moneymate.transaction.viewModel.TransactionTypeCreateViewModel
 import com.example.moneymate.ui.theme.MoneyMateTheme
 
@@ -31,27 +34,46 @@ class MainActivity : ComponentActivity() {
                     val owner = LocalViewModelStoreOwner.current
 
                     owner?.let {
-                        val viewModel: TransactionTypeCreateViewModel = viewModel(
-                            it,
-                            "TransactionTypeCreateViewFactory",
-                            TransactionTypeCreateViewFactory(
-                                LocalContext.current.applicationContext
-                                        as Application
-                            )
-                        )
+
 
                         val navController = rememberNavController()
                         NavHost(
                             navController = navController,
-                            startDestination = NavRoutes.TransactionTypeCreate.route
+                            startDestination = NavRoutes.Home.route
                         ) {
+                            composable(NavRoutes.Home.route) {
+                                HomePage(navController, modifier = Modifier.padding(innerPadding))
+                            }
                             composable(NavRoutes.TransactionTypeCreate.route) {
+                                val viewModel: TransactionTypeCreateViewModel = viewModel(
+                                    it,
+                                    "TransactionTypeCreateViewFactory",
+                                    TransactionTypeCreateViewFactory(
+                                        LocalContext.current.applicationContext
+                                                as Application
+                                    )
+                                )
                                 TransactionTypeCreateView(
                                     viewModel,
                                     navController,
                                     modifier = Modifier.padding(innerPadding)
                                 )
                             }
+                            composable(NavRoutes.TransactionCreate.route) {
+                                val viewModel: TransactionCreateViewModel = viewModel(
+                                    it,
+                                    "TransactionCreateViewFactory",
+                                    TransactionCreteViewModelFactory(
+                                        LocalContext.current.applicationContext as Application
+                                    )
+                                )
+                                TransactionCreateView(
+                                    viewModel = viewModel,
+                                    navController = navController,
+                                    modifier = Modifier.padding(innerPadding)
+                                )
+                            }
+
                         }
 
 

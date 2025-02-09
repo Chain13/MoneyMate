@@ -5,7 +5,6 @@ import com.example.moneymate.transaction.entity.TransactionEntity
 
 
 class TransactionRepository(private val TransactionRepository: TransactionDao) {
-
     suspend fun insert(transactionEntity: TransactionEntity) {
         TransactionRepository.insertTransaction(transactionEntity)
     }
