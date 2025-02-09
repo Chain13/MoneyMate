@@ -1,4 +1,4 @@
-package com.example.moneymate.transaction
+package com.example.moneymate.transaction.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

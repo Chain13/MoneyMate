@@ -1,4 +1,4 @@
-package com.example.moneymate.transaction
+package com.example.moneymate.transaction.view
 
 import android.app.Application
 import androidx.compose.runtime.Composable
@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
+import com.example.moneymate.transaction.viewModel.TransactionCreateViewModel
 
 @Composable
 fun TransactionCreateView(

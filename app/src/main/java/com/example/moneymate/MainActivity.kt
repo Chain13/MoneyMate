@@ -15,10 +15,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.moneymate.transaction.TransactionCreateView
-import com.example.moneymate.transaction.TransactionTypeCreateView
-import com.example.moneymate.transaction.TransactionTypeCreateViewFactory
-import com.example.moneymate.transaction.TransactionTypeCreateViewModel
+import com.example.moneymate.transaction.view.TransactionTypeCreateView
+import com.example.moneymate.transaction.view.TransactionTypeCreateViewFactory
+import com.example.moneymate.transaction.viewModel.TransactionTypeCreateViewModel
 import com.example.moneymate.ui.theme.MoneyMateTheme
 
 

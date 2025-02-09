@@ -1,6 +1,7 @@
-package com.example.moneymate.transaction
+package com.example.moneymate.transaction.dao
 
 import androidx.room.*
+import com.example.moneymate.transaction.entity.TransactionEntity
 
 @Dao
 interface TransactionDao {

@@ -7,6 +7,10 @@ import androidx.room.RenameColumn
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
+import com.example.moneymate.transaction.dao.TransactionDao
+import com.example.moneymate.transaction.dao.TransactionTypeDao
+import com.example.moneymate.transaction.entity.TransactionEntity
+import com.example.moneymate.transaction.entity.TransactionTypeEntity
 
 @Database(
     entities = [TransactionEntity::class, TransactionTypeEntity::class],

@@ -1,4 +1,4 @@
-package com.example.moneymate.transaction
+package com.example.moneymate.transaction.view
 
 import android.app.Application
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.example.moneymate.transaction.viewModel.TransactionTypeCreateViewModel
 
 
 @Composable
