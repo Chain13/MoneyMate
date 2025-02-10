@@ -4,9 +4,9 @@ import com.example.moneymate.transaction.dao.TransactionDao
 import com.example.moneymate.transaction.entity.TransactionEntity
 
 
-class TransactionRepository(private val TransactionRepository: TransactionDao) {
+class TransactionRepository(private val transactionDao: TransactionDao) {
     suspend fun insert(transactionEntity: TransactionEntity) {
-        TransactionRepository.insertTransaction(transactionEntity)
+        transactionDao.insertTransaction(transactionEntity)
     }
 
 }

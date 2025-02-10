@@ -19,8 +19,11 @@ import com.example.moneymate.transaction.view.TransactionCreateView
 import com.example.moneymate.transaction.view.TransactionCreteViewModelFactory
 import com.example.moneymate.transaction.view.TransactionTypeCreateView
 import com.example.moneymate.transaction.view.TransactionTypeCreateViewFactory
+import com.example.moneymate.transaction.view.TransactionTypeListView
+import com.example.moneymate.transaction.view.TransactionTypeListViewFactory
 import com.example.moneymate.transaction.viewModel.TransactionCreateViewModel
 import com.example.moneymate.transaction.viewModel.TransactionTypeCreateViewModel
+import com.example.moneymate.transaction.viewModel.TransactionTypeListViewModel
 import com.example.moneymate.ui.theme.MoneyMateTheme
 
 
@@ -73,7 +76,20 @@ class MainActivity : ComponentActivity() {
                                     modifier = Modifier.padding(innerPadding)
                                 )
                             }
-
+                            composable(NavRoutes.TransactionTypeList.route) {
+                                val viewModel: TransactionTypeListViewModel = viewModel(
+                                    it,
+                                    "TransactionTypeListViewFactory",
+                                    TransactionTypeListViewFactory(
+                                        LocalContext.current.applicationContext as Application
+                                    )
+                                )
+                                TransactionTypeListView(
+                                    viewModel = viewModel,
+                                    navController = navController,
+                                    modifier = Modifier.padding(innerPadding)
+                                )
+                            }
                         }
 
 

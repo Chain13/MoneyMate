@@ -33,6 +33,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
     kotlinOptions {
         jvmTarget = "11"
     }
@@ -61,6 +64,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation("androidx.room:room-gradle-plugin")
     implementation("androidx.compose.material3:material3:1.4.0-alpha07")
+    implementation("androidx.compose.foundation:foundation:1.7.7")
     annotationProcessor(libs.androidx.room.room.compiler)
     ksp(libs.androidx.room.room.compiler)
     testImplementation(libs.junit)

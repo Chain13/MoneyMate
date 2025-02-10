@@ -1,6 +1,7 @@
 package com.example.moneymate.transaction.viewModel
 
 import android.app.Application
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.example.moneymate.transaction.MoneyMateDatabase
 import com.example.moneymate.transaction.entity.TransactionTypeEntity
@@ -9,13 +10,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class TransactionTypeListViewModel(application: Application): ViewModel() {
-    private val _transactionTypeList = MutableStateFlow<List<TransactionTypeEntity>>(emptyList())
-    val transactionTypeList: StateFlow<List<TransactionTypeEntity>> = _transactionTypeList
+    val allTransactionType: LiveData<List<TransactionTypeEntity>>
     private val repository: TransactionTypeRepository
     init {
         val moneyMateDatabase = MoneyMateDatabase.getDatabase(application)
         val transactionTypeDao = moneyMateDatabase.transactionTypeDao()
         repository = TransactionTypeRepository(transactionTypeDao)
+        allTransactionType = repository.allTransactionType
     }
 
 }
