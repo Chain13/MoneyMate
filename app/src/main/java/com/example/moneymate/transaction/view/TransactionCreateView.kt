@@ -25,15 +25,12 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.motionEventSpy
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -57,26 +54,36 @@ fun TransactionCreateView(
         navController = navController
     )
 }
+
 @Composable
-fun TransactionCreateScreen(modifier: Modifier = Modifier, saveTransaction: (Double, String, TransactionTypeEntity?)-> Unit, allType:List<TransactionTypeEntity>, navController: NavController, ) {
+fun TransactionCreateScreen(
+    modifier: Modifier = Modifier,
+    saveTransaction: (Double, String, TransactionTypeEntity?) -> Unit,
+    allType: List<TransactionTypeEntity>,
+    navController: NavController,
+) {
     var amount by rememberSaveable { mutableStateOf("") }
     var category by rememberSaveable { mutableStateOf("") }
     var type by remember { mutableStateOf<TransactionTypeEntity?>(null) }
     var isTransactionSaved by rememberSaveable { mutableStateOf(false) }
-    Column(modifier=modifier
-        .fillMaxSize()
-        .padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(20.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         Text("Transaction Create", style = MaterialTheme.typography.headlineMedium)
         OutlinedTextField(
             value = amount,
-            onValueChange = { amount=it },
+            onValueChange = { amount = it },
             label = { Text("Transaction Amount") },
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("Enter type (Expense, Income, Transfer)") }
         )
         OutlinedTextField(
             value = category,
-            onValueChange = { category=it },
+            onValueChange = { category = it },
             label = { Text("Transaction Category") },
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("Enter type (Expense, Income, Transfer)") }
@@ -84,11 +91,11 @@ fun TransactionCreateScreen(modifier: Modifier = Modifier, saveTransaction: (Dou
         TransactionTypeDropdown(
             allType = allType,
             modifier = modifier,
-            setType = {it->type=it}
+            setType = { it -> type = it }
         )
         Button(
             onClick = {
-                saveTransaction(amount.toDouble(), category,type)
+                saveTransaction(amount.toDouble(), category, type)
                 isTransactionSaved = true
             },
             modifier = Modifier.fillMaxWidth()
@@ -111,6 +118,7 @@ fun TransactionCreateScreen(modifier: Modifier = Modifier, saveTransaction: (Dou
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionTypeDropdown(
@@ -123,7 +131,7 @@ fun TransactionTypeDropdown(
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = it },
-        modifier=modifier
+        modifier = modifier
     ) {
         TextField(
             modifier = Modifier.menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable),
@@ -154,19 +162,23 @@ fun TransactionTypeDropdown(
 
 
 }
+
 @Preview(showSystemUi = true)
 @Composable
 fun TransactionCreateScreenPreview() {
     TransactionCreateScreen(
         modifier = Modifier.statusBarsPadding(),
         saveTransaction = { _, _, _ -> },
-        allType = listOf(TransactionTypeEntity(
-            id = 1,
-            typeName = "Education"
-        )),
+        allType = listOf(
+            TransactionTypeEntity(
+                id = 1,
+                typeName = "Education"
+            )
+        ),
         navController = rememberNavController()
     )
 }
+
 class TransactionCreteViewModelFactory(val application: Application) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {

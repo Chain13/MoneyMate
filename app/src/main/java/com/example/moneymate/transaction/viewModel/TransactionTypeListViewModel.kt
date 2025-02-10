@@ -6,8 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.example.moneymate.transaction.MoneyMateDatabase
 import com.example.moneymate.transaction.entity.TransactionTypeEntity
 import com.example.moneymate.transaction.repository.TransactionTypeRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+
 
 class TransactionTypeListViewModel(application: Application): ViewModel() {
     val allTransactionType: LiveData<List<TransactionTypeEntity>>

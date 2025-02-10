@@ -1,8 +1,6 @@
 package com.example.moneymate.transaction.view
 
 import android.app.Application
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,26 +12,21 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.BrushPainter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.moneymate.transaction.entity.TransactionTypeEntity
 import com.example.moneymate.transaction.viewModel.TransactionTypeListViewModel
-import androidx.compose.runtime.getValue
 
 @Composable
-fun TransactionTypeListView(viewModel: TransactionTypeListViewModel, navController: NavController, modifier: Modifier) {
+fun TransactionTypeListView(viewModel: TransactionTypeListViewModel, navController: NavController, modifier: Modifier= Modifier) {
     val allTransactionType by viewModel.allTransactionType.observeAsState(listOf())
     TransactionTypeListScreen(
         allTransactionType = allTransactionType.toList(),
@@ -44,17 +37,21 @@ fun TransactionTypeListView(viewModel: TransactionTypeListViewModel, navControll
 }
 @Composable
 fun TransactionTypeListScreen(modifier:Modifier = Modifier, allTransactionType:List<TransactionTypeEntity>, navController: NavController) {
-    Column(modifier=modifier.fillMaxSize().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp)) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         Text("Transaction Type", style = MaterialTheme.typography.headlineMedium)
-        Column(modifier= modifier.fillMaxWidth()) {
-            allTransactionType.forEachIndexed { index, it ->
-                Row(modifier= modifier.padding(8.dp), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                    Text(index.toString())
+        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+            allTransactionType.forEach {
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text(it.id.toString())
                     Text(it.typeName)
                 }
             }
-
         }
         Button(
             onClick = {
@@ -63,7 +60,8 @@ fun TransactionTypeListScreen(modifier:Modifier = Modifier, allTransactionType:L
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Cancel")
-        }    }
+        }
+    }
 }
 @Preview(showSystemUi = true)
 @Composable
