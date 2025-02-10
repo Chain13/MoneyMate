@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
@@ -31,8 +32,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -76,17 +79,22 @@ fun TransactionCreateScreen(
         Text("Transaction Create", style = MaterialTheme.typography.headlineMedium)
         OutlinedTextField(
             value = amount,
-            onValueChange = { amount = it },
+            onValueChange = {
+                if(it.isDigitsOnly()) {
+                    amount = it
+                }
+                            },
             label = { Text("Transaction Amount") },
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Enter type (Expense, Income, Transfer)") }
+            placeholder = { Text("Enter type (Expense, Income, Transfer)") },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
         )
         OutlinedTextField(
             value = category,
             onValueChange = { category = it },
             label = { Text("Transaction Category") },
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Enter type (Expense, Income, Transfer)") }
+            placeholder = { Text("Enter type (Groceries, Rent, Transportation)") }
         )
         TransactionTypeDropdown(
             allType = allType,
