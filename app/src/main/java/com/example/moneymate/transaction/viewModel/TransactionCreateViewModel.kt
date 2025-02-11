@@ -5,8 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moneymate.transaction.MoneyMateDatabase
+import com.example.moneymate.transaction.entity.CategoryEntity
 import com.example.moneymate.transaction.entity.TransactionEntity
 import com.example.moneymate.transaction.entity.TransactionTypeEntity
+import com.example.moneymate.transaction.repository.CategoryRepository
 import com.example.moneymate.transaction.repository.TransactionRepository
 import com.example.moneymate.transaction.repository.TransactionTypeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,31 +18,31 @@ class TransactionCreateViewModel(application: Application) : ViewModel() {
 
     private val _isTransactionSaved = MutableStateFlow(false)
     private val transactionRepository: TransactionRepository
-    private val transactionTypeRepository: TransactionTypeRepository
+    private val cagetoryRepository: CategoryRepository
     val isTransactionSaved = _isTransactionSaved
-    val allType: LiveData<List<TransactionTypeEntity>>
+    val allCategory: LiveData<List<CategoryEntity>>
 
     init {
         val moneyMateDatabase = MoneyMateDatabase.getDatabase(application)
         val transactionDao = moneyMateDatabase.transactionDao()
-        val transactionTypeDao = moneyMateDatabase.transactionTypeDao()
+        val categoryDao = moneyMateDatabase.categoryDao()
         transactionRepository = TransactionRepository(transactionDao)
-        transactionTypeRepository = TransactionTypeRepository(transactionTypeDao)
-        allType = transactionTypeRepository.allTransactionType
+        cagetoryRepository = CategoryRepository(categoryDao)
+        allCategory = cagetoryRepository.allCategory
     }
 
 
 
-    fun saveTransaction(amount: Double, category: String, type: TransactionTypeEntity?) {
-        if(type == null) {
+    fun saveTransaction(amount: Double, category: CategoryEntity?, description: String?) {
+        if(category == null) {
             return
         }
         val date = System.currentTimeMillis()
             val transactionEntity = TransactionEntity(
-                amount = amount.toDouble(),
-                category = category,
-                typeId = type.id,
-                date = date
+                amount = amount,
+                categoryID = category.id,
+                date = date,
+                description = description
             )
             viewModelScope.launch {
                 transactionRepository.insert(transactionEntity)

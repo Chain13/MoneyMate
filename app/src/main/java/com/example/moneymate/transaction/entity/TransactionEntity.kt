@@ -7,18 +7,19 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "transactions", foreignKeys = [
+
         ForeignKey(
             entity = TransactionEntity::class,
             parentColumns = arrayOf("id"),
-            childColumns = arrayOf("type_id"),
-            onDelete = ForeignKey.CASCADE
+            childColumns = arrayOf("category_id"),
+            onDelete = ForeignKey.SET_NULL
         )
     ]
 )
 data class TransactionEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "amount") val amount: Double,
-    @ColumnInfo(name = "category") val category: String,
-    @ColumnInfo(name = "type_id", index = true) val typeId: Long?,
-    @ColumnInfo(name = "date") val date: Long
+    @ColumnInfo(name = "category_id") val categoryID: Long?,
+    @ColumnInfo(name = "date") val date: Long,
+    @ColumnInfo(name = "description") val description: String?
 )

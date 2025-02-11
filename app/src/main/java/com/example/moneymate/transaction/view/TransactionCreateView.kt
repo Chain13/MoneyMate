@@ -40,7 +40,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.example.moneymate.transaction.entity.TransactionTypeEntity
+import com.example.moneymate.transaction.entity.CategoryEntity
 import com.example.moneymate.transaction.viewModel.TransactionCreateViewModel
 
 @Composable
@@ -49,11 +49,11 @@ fun TransactionCreateView(
     navController: NavController,
     modifier: Modifier = Modifier
 ) {
-    val allType = viewModel.allType.observeAsState(listOf())
+    val allCategory = viewModel.allCategory.observeAsState(listOf())
     TransactionCreateScreen(
         modifier,
-        saveTransaction = viewModel::saveTransaction,
-        allType = allType.value,
+        selectedCategory = viewModel::saveTransaction,
+        allCategory = allCategory.value,
         navController = navController
     )
 }
@@ -61,14 +61,14 @@ fun TransactionCreateView(
 @Composable
 fun TransactionCreateScreen(
     modifier: Modifier = Modifier,
-    saveTransaction: (Double, String, TransactionTypeEntity?) -> Unit,
-    allType: List<TransactionTypeEntity>,
+    selectedCategory: (Double, CategoryEntity?, String?) -> Unit,
+    allCategory: List<CategoryEntity>,
     navController: NavController,
 ) {
     var amount by rememberSaveable { mutableStateOf("") }
-    var category by rememberSaveable { mutableStateOf("") }
-    var type by remember { mutableStateOf<TransactionTypeEntity?>(null) }
+    var category by remember { mutableStateOf<CategoryEntity?>(null) }
     var isTransactionSaved by rememberSaveable { mutableStateOf(false) }
+    var description by rememberSaveable { mutableStateOf("") }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -90,20 +90,25 @@ fun TransactionCreateScreen(
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
         )
         OutlinedTextField(
-            value = category,
-            onValueChange = { category = it },
-            label = { Text("Transaction Category") },
+            value = description,
+            onValueChange = {
+
+                    amount = it
+            },
+            label = { Text("Transaction Description") },
             modifier = Modifier.fillMaxWidth(),
-            placeholder = { Text("Enter type (Groceries, Rent, Transportation)") }
+            placeholder = { Text("Enter your description") },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
         )
-        TransactionTypeDropdown(
-            allType = allType,
+
+        TransactionCategoryDropdown(
+            allType = allCategory,
             modifier = modifier,
-            setType = { it -> type = it }
+            setType = { it -> category = it }
         )
         Button(
             onClick = {
-                saveTransaction(amount.toDouble(), category, type)
+                selectedCategory(amount.toDouble(), category,description)
                 isTransactionSaved = true
             },
             modifier = Modifier.fillMaxWidth()
@@ -126,13 +131,12 @@ fun TransactionCreateScreen(
         }
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TransactionTypeDropdown(
-    allType: List<TransactionTypeEntity>,
+fun TransactionCategoryDropdown(
+    allType: List<CategoryEntity>,
     modifier: Modifier,
-    setType: (TransactionTypeEntity) -> Unit
+    setType: (CategoryEntity) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
     val textFieldState = rememberTextFieldState("")
@@ -146,7 +150,7 @@ fun TransactionTypeDropdown(
             state = textFieldState,
             readOnly = true,
             lineLimits = TextFieldLineLimits.SingleLine,
-            label = { Text("Transaction Type") },
+            label = { Text("Category") },
             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
             colors = ExposedDropdownMenuDefaults.textFieldColors(),
         )
@@ -156,9 +160,9 @@ fun TransactionTypeDropdown(
         ) {
             allType.forEach { option ->
                 DropdownMenuItem(
-                    text = { Text(option.typeName, style = MaterialTheme.typography.bodyLarge) },
+                    text = { Text(option.categoryName, style = MaterialTheme.typography.bodyLarge) },
                     onClick = {
-                        textFieldState.setTextAndPlaceCursorAtEnd(option.typeName)
+                        textFieldState.setTextAndPlaceCursorAtEnd(option.categoryName)
                         expanded = false
                         setType(option)
                     },
@@ -171,17 +175,20 @@ fun TransactionTypeDropdown(
 
 }
 
+
 @Preview(showSystemUi = true)
 @Composable
 fun TransactionCreateScreenPreview() {
     TransactionCreateScreen(
         modifier = Modifier.statusBarsPadding(),
-        saveTransaction = { _, _, _ -> },
-        allType = listOf(
-            TransactionTypeEntity(
+        selectedCategory = { _, _, _ -> },
+        allCategory = listOf(
+            CategoryEntity(
                 id = 1,
-                typeName = "Education"
+                categoryName = "Business",
+                transactionType_id =1L
             )
+
         ),
         navController = rememberNavController()
     )
