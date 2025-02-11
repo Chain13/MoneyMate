@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
     ]
 )
 data class CategoryEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     @ColumnInfo(name = "category_name") val categoryName: String,
     @ColumnInfo(name = "transaction_type_id") val transactionType_id: Long?
 )

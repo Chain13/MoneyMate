@@ -20,6 +20,9 @@ fun HomePage(navController: NavController, modifier: Modifier) {
         Button(onClick = { navController.navigate(NavRoutes.TransactionCreate.route) }) {
             Text(text = "Create Transaction")
         }
+        Button(onClick = { navController.navigate(NavRoutes.CategoryCreate.route) }) {
+            Text(text = "Create Category")
+        }
         Button(onClick = { navController.navigate(NavRoutes.TransactionTypeList.route) }) {
             Text(text = "Transaction Type List")
         }
