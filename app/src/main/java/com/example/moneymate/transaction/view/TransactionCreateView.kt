@@ -93,7 +93,7 @@ fun TransactionCreateScreen(
             value = description,
             onValueChange = {
 
-                    amount = it
+                    description = it
             },
             label = { Text("Transaction Description") },
             modifier = Modifier.fillMaxWidth(),
@@ -111,7 +111,8 @@ fun TransactionCreateScreen(
                 saveTransaction(amount.toDouble(), category,description)
                 isTransactionSaved = true
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            enabled = !amount.isEmpty() && category != null
         ) {
             Text("Submit")
         }
