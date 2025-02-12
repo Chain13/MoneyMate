@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -41,7 +42,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.SoftwareKeyboardController
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlin.collections.forEach
 
@@ -53,13 +57,17 @@ fun CategoryCreateView(
     modifier: Modifier = Modifier
 ) {
     val allTransactionType = viewModel.allTransactionType.observeAsState(listOf())
-    var isCategorySaved = viewModel.isCategorySaved.collectAsState()
+    var categorySavedStatus = viewModel.categorySavedStatus.collectAsState()
+    val isCategorySaved = viewModel.isCategorySaved.collectAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
     CategoryCreateScreen(
         modifier,
         saveCategory = viewModel::saveCategory,
         allTransactionType = allTransactionType.value,
         navController = navController,
-        isCategorySaved = isCategorySaved.value
+        categorySavedStatus = categorySavedStatus.value,
+        isCategorySaved = isCategorySaved.value,
+        keyboardController= keyboardController
     )
 
 }
@@ -69,7 +77,9 @@ fun CategoryCreateScreen(
     saveCategory: (String?, TransactionTypeEntity?) -> Unit,
     allTransactionType: List<TransactionTypeEntity>,
     navController: NavController,
-    isCategorySaved: Boolean
+    categorySavedStatus: String,
+    isCategorySaved: Boolean,
+    keyboardController: SoftwareKeyboardController?
 ) {
     var categoryName by rememberSaveable { mutableStateOf("") }
     var selectedTransactionType by remember { mutableStateOf<TransactionTypeEntity?>(null) }
@@ -89,6 +99,7 @@ fun CategoryCreateScreen(
             label = { Text("Category Name") },
             modifier = Modifier.fillMaxWidth(),
             placeholder = { Text("Enter type Category Name") },
+            keyboardActions = KeyboardActions { keyboardController?.hide() }
 //            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
         )
         TransactionTypeDropdown(
@@ -99,6 +110,8 @@ fun CategoryCreateScreen(
         Button(
             onClick = {
                 saveCategory(categoryName, selectedTransactionType)
+                categoryName = ""
+                keyboardController?.hide()
 
             },
             modifier = Modifier.fillMaxWidth(),
@@ -109,16 +122,17 @@ fun CategoryCreateScreen(
         Button(
             onClick = {
                 navController.popBackStack()
+                keyboardController?.hide()
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
         ) {
             Text("Cancel")
         }
         Spacer(modifier = Modifier.height(20.dp))
 
         // Success Message after Saving
-        if (isCategorySaved) {
-            Text("Category Saved Successfully!", color = MaterialTheme.colorScheme.primary)
+        if (categorySavedStatus != "") {
+            Text("$categorySavedStatus", textAlign = TextAlign.Center, color = if (isCategorySaved) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error)
         }
     }
 }
@@ -175,11 +189,15 @@ fun CategoryCreateScreenPreview() {
         TransactionTypeEntity(id = 1, typeName = "Expense"),
         TransactionTypeEntity(id = 2, typeName = "Income")
     )
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     CategoryCreateScreen(
         modifier = Modifier.statusBarsPadding(), saveCategory = { _, _ -> },
         allTransactionType = transactionTypes,
         navController = rememberNavController(),
-        isCategorySaved = false
+        categorySavedStatus = "",
+        isCategorySaved = false,
+        keyboardController = keyboardController
     )
 }
 class CategoryCreateViewModelFactory(val application: Application): ViewModelProvider.Factory {

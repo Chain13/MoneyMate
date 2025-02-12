@@ -1,6 +1,7 @@
 package com.example.moneymate.transaction.viewModel
 
 import android.app.Application
+import android.database.sqlite.SQLiteConstraintException
 import androidx.compose.runtime.remember
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -21,6 +22,8 @@ class CategoryCreateViewModel(application: Application): ViewModel() {
     private val transactionTypeRepository: TransactionTypeRepository
     val allCategory: LiveData<List<CategoryEntity>>
     val allTransactionType: LiveData<List<TransactionTypeEntity>>
+    private val _categorySavedStatus = MutableStateFlow("")
+    val categorySavedStatus = _categorySavedStatus
     private val _isCategorySaved = MutableStateFlow(false)
     val isCategorySaved = _isCategorySaved
     init {
@@ -46,9 +49,19 @@ class CategoryCreateViewModel(application: Application): ViewModel() {
                 transactionType_id = transactionType?.id
             )
             viewModelScope.launch{
-                categoryRepository.insert(categoryEntity)
+                try {
+                    categoryRepository.insert(categoryEntity)
+                    isCategorySaved.value = true
+                    _categorySavedStatus.value = "${name} Category Saved Successfully!"
+                } catch (e: SQLiteConstraintException) {
+                    isCategorySaved.value = false
+                    _categorySavedStatus.value = "Saved FAILED!. ${name} repeatedly in database "
+                } catch (e: Exception) {
+                    isCategorySaved.value = false
+
+                    _categorySavedStatus.value = "${name} Category Saved FAILED!"
+                }
             }
-            _isCategorySaved.value = true
         }
 
     }

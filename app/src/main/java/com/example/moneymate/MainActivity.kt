@@ -89,9 +89,9 @@ class MainActivity : ComponentActivity() {
                                 )
                                 TransactionTypeListView(
                                     viewModel = viewModel,
+                                    modifier = Modifier.padding(innerPadding),
                                     navController = navController,
-                                    modifier = Modifier.padding(innerPadding)
-                                )
+                                    )
                             }
                             composable(NavRoutes.CategoryCreate.route) {
                                 val viewModel: CategoryCreateViewModel = viewModel(

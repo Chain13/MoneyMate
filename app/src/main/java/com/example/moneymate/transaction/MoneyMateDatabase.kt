@@ -9,16 +9,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.AutoMigrationSpec
 import com.example.moneymate.transaction.dao.CategoryDao
+import com.example.moneymate.transaction.dao.CategoryWithTypeDao
 import com.example.moneymate.transaction.dao.TransactionDao
 import com.example.moneymate.transaction.dao.TransactionTypeDao
 import com.example.moneymate.transaction.dao.TransactionWithTypeDao
 import com.example.moneymate.transaction.entity.CategoryEntity
+import com.example.moneymate.transaction.entity.CategoryWithTransactionTypeEntity
 import com.example.moneymate.transaction.entity.TransactionEntity
 import com.example.moneymate.transaction.entity.TransactionTypeEntity
 
 @Database(
     entities = [TransactionEntity::class, TransactionTypeEntity::class, CategoryEntity::class],
-    version = 6,
+    version = 7,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(
@@ -42,6 +44,10 @@ import com.example.moneymate.transaction.entity.TransactionTypeEntity
         AutoMigration(
             from = 5,
             to = 6
+        ),
+        AutoMigration(
+            from = 6,
+            to = 7
         )
     ]
 )
@@ -50,6 +56,7 @@ abstract class MoneyMateDatabase : RoomDatabase() {
     abstract fun transactionTypeDao(): TransactionTypeDao
     abstract fun transactionWithTypeDao(): TransactionWithTypeDao
     abstract fun categoryDao(): CategoryDao
+    abstract fun categoryWithTypeDao(): CategoryWithTypeDao
 
     @RenameColumn(tableName = "transactions", fromColumnName = "type", toColumnName = "typeId")
     class Migartion_1_2 : AutoMigrationSpec
