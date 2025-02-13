@@ -13,6 +13,7 @@ import com.example.moneymate.transaction.dao.CategoryWithTypeDao
 import com.example.moneymate.transaction.dao.TransactionDao
 import com.example.moneymate.transaction.dao.TransactionTypeDao
 import com.example.moneymate.transaction.dao.TransactionWithTypeDao
+import com.example.moneymate.transaction.dao.TransactionWithinCategoryDao
 import com.example.moneymate.transaction.entity.CategoryEntity
 import com.example.moneymate.transaction.entity.CategoryWithTransactionTypeEntity
 import com.example.moneymate.transaction.entity.TransactionEntity
@@ -57,6 +58,7 @@ abstract class MoneyMateDatabase : RoomDatabase() {
     abstract fun transactionWithTypeDao(): TransactionWithTypeDao
     abstract fun categoryDao(): CategoryDao
     abstract fun categoryWithTypeDao(): CategoryWithTypeDao
+    abstract fun transactionWithinCategoryDao(): TransactionWithinCategoryDao
 
     @RenameColumn(tableName = "transactions", fromColumnName = "type", toColumnName = "typeId")
     class Migartion_1_2 : AutoMigrationSpec

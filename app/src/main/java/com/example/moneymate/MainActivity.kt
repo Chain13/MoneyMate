@@ -23,10 +23,13 @@ import com.example.moneymate.transaction.view.TransactionTypeCreateView
 import com.example.moneymate.transaction.view.TransactionTypeCreateViewFactory
 import com.example.moneymate.transaction.view.TransactionTypeListView
 import com.example.moneymate.transaction.view.TransactionTypeListViewFactory
+import com.example.moneymate.transaction.view.TransactionWithinCategoryView
+import com.example.moneymate.transaction.view.TransactionWithinCategoryViewModelFactory
 import com.example.moneymate.transaction.viewModel.CategoryCreateViewModel
 import com.example.moneymate.transaction.viewModel.TransactionCreateViewModel
 import com.example.moneymate.transaction.viewModel.TransactionTypeCreateViewModel
 import com.example.moneymate.transaction.viewModel.TransactionTypeListViewModel
+import com.example.moneymate.transaction.viewModel.TransactionWithinCategoryViewModel
 import com.example.moneymate.ui.theme.MoneyMateTheme
 
 
@@ -106,6 +109,24 @@ class MainActivity : ComponentActivity() {
                                     navController = navController,
                                     modifier = Modifier.padding(innerPadding)
                                 )
+                            }
+                            composable(NavRoutes.TransactionWithinCategory.route + "/{categoryId}") { backStackEntry ->
+                                val categoryId = backStackEntry.arguments?.getString("categoryId")
+                                val viewModel: TransactionWithinCategoryViewModel = viewModel(
+                                    it,
+                                    "TransactionWithinCategoryViewModelFactory",
+                                    TransactionWithinCategoryViewModelFactory(
+                                        LocalContext.current.applicationContext as Application
+                                    )
+                                )
+                                categoryId?.let { it1 ->
+                                    TransactionWithinCategoryView(
+                                        viewModel = viewModel,
+                                        navController = navController,
+                                        modifier = Modifier.padding(innerPadding),
+                                        categoryId = it1.toLong()
+                                    )
+                                }
                             }
                         }
 

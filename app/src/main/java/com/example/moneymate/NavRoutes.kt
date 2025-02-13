@@ -6,4 +6,5 @@ sealed class NavRoutes(val route: String) {
     object TransactionTypeList: NavRoutes("transaction_type_list")
     object TransactionCreate : NavRoutes("transaction_create")
     object CategoryCreate: NavRoutes("category_create")
+    object TransactionWithinCategory: NavRoutes("transaction_within_category")
 }

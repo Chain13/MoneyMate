@@ -1,5 +1,6 @@
 package com.example.moneymate.transaction.view
 
+import android.app.Application
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,22 +12,37 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import com.example.moneymate.transaction.entity.CategoryEntity
 import com.example.moneymate.transaction.entity.TransactionEntity
+import com.example.moneymate.transaction.viewModel.TransactionTypeListViewModel
+import com.example.moneymate.transaction.viewModel.TransactionWithinCategoryViewModel
 import java.util.Date
 
 @Composable
-fun CategoryView() {
-
+fun TransactionWithinCategoryView(viewModel: TransactionWithinCategoryViewModel, navController: NavController, modifier: Modifier = Modifier, categoryId: Long) {
+    println("Call TransactionWithinCategory with categoryId = $categoryId")
+    val transactionWithinCategoryEntityList = viewModel.transactionWithinCategoryEntityList.observeAsState(listOf())
+    viewModel.getCategoryById(categoryId)
+    val categoryEntity = viewModel.categoryEntity.observeAsState()
+    viewModel.getTransactionWithinCategory(categoryId)
+    TransactionWithinCategoryScreen(
+        transactionWithinCategory = transactionWithinCategoryEntityList.value,
+        categoryEntity = categoryEntity.value,
+        modifier = modifier
+    )
 }
 
 @Composable
-fun CategoryScreen(transactionWithinCategory: List<TransactionEntity>, categoryEntity: CategoryEntity, modifier: Modifier = Modifier) {
+fun TransactionWithinCategoryScreen(transactionWithinCategory: List<TransactionEntity>, categoryEntity: CategoryEntity?, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -34,7 +50,7 @@ fun CategoryScreen(transactionWithinCategory: List<TransactionEntity>, categoryE
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Text(categoryEntity.categoryName, style = MaterialTheme.typography.headlineSmall)
+        categoryEntity?.let { Text(it.categoryName, style = MaterialTheme.typography.headlineSmall) }
         LazyColumn(modifier = Modifier.fillMaxWidth()) {
             transactionWithinCategory.forEach { transactionEntity ->
                 item {
@@ -52,7 +68,7 @@ fun CategoryScreen(transactionWithinCategory: List<TransactionEntity>, categoryE
 }
 @Preview(showSystemUi = true)
 @Composable
-fun CategoryScreenPreview() {
+fun TransactionWithinCategoryScreenPreview() {
     val mockCategories = listOf(
         CategoryEntity(id = 1, categoryName = "Groceries", transactionType_id = 1, icon = "ShoppingCart", description = "Food and household items"),
         CategoryEntity(id = 2, categoryName = "Utilities", transactionType_id = 1, icon = "Lightbulb", description = "Electricity, water, and internet bills"),
@@ -79,9 +95,15 @@ fun CategoryScreenPreview() {
     )
 
 
-    CategoryScreen(
+    TransactionWithinCategoryScreen(
         transactionWithinCategory = mockTransactions,
         categoryEntity = mockCategories[0],
         modifier = Modifier.statusBarsPadding()
     )
+}
+
+class TransactionWithinCategoryViewModelFactory(val application: Application) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return TransactionWithinCategoryViewModel(application) as T
+    }
 }

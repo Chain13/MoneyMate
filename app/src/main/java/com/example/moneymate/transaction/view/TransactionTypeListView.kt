@@ -3,6 +3,7 @@ package com.example.moneymate.transaction.view
 import android.app.Application
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.moneymate.NavRoutes
 import com.example.moneymate.transaction.entity.CategoryEntity
 import com.example.moneymate.transaction.entity.CategoryWithTransactionTypeEntity
 import com.example.moneymate.transaction.entity.TransactionTypeEntity
@@ -87,15 +89,23 @@ fun TransactionTypeListScreen(
                 .padding(6.dp)
                 .fillMaxWidth()
         ) {
-            categoryMap.entries.forEach {
+            categoryMap.entries.forEach { category ->
                 item {
-                    Text("${it.key.typeName}", style = MaterialTheme.typography.bodyLarge)
-                    it.value.forEach {
+                    Text("${category.key.typeName}", style = MaterialTheme.typography.bodyLarge)
+                    category.value.forEach {
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             modifier = Modifier
                                 .padding(6.dp)
                                 .fillMaxWidth()
+                                .clickable(onClick = {
+                                    navController.navigate(String.format(
+                                        NavRoutes.TransactionWithinCategory.route+"/${it.id}",
+                                        it.id
+                                    )
+                                    )
+
+                                })
                         ) {
                             Icon(
                                 iconByName(it.icon),
