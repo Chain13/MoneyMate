@@ -45,7 +45,18 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
                 asyncFindAllTransactionWithinCategory(categoryId).await()
         }
     }
-
+    fun findAllTransactionWithinCategory(categoryId: Long, startDate: Long, endDate: Long) {
+        coroutineScope.launch(Dispatchers.Main) {
+            transactionWithinCategoryEntityList.value =
+                asyncFindAllTransactionWithinCategory(categoryId, startDate, endDate).await()
+        }
+    }
+    private fun asyncFindAllTransactionWithinCategory(categoryId: Long, startDate: Long, endDate: Long): Deferred<List<TransactionEntity>> =
+        coroutineScope.async(
+            Dispatchers.IO
+        ) {
+            return@async transactionDao.getTransactionWithinCategoryDao(categoryId, startDate, endDate)
+        }
     private fun asyncFindAllTransactionWithinCategory(categoryId: Long): Deferred<List<TransactionEntity>> =
         coroutineScope.async(
             Dispatchers.IO
